@@ -23,7 +23,7 @@
                 <!-- Import dependency management from Spring Boot -->
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>4.0.6</version> <!-- must be 4.X to correspond to spring 7 -->
+                <version>${version.spring-boot-4}</version> <!-- must be 4.X to correspond to spring 7 -->
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -60,12 +60,12 @@
 
     <profiles>
         <profile>
-            <!-- Spring Boot 4 / Spring Framework 7 requires junit 6 which requires java 17 -->
-            <id>testing-jdk-11</id>
+            <!-- Spring Boot 4.1 / Spring Framework 7 requires junit 6 which requires java 17 -->
+            <id>testing-jdk-17</id>
             <activation>
                 <property>
                     <name>test_java_version</name>
-                    <value>11</value>
+                    <value>17</value>
                 </property>
             </activation>
             <properties>

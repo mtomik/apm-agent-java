@@ -19,7 +19,7 @@
 package co.elastic.apm.agent.testutils;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledForJreRange;
+import org.junit.jupiter.api.condition.DisabledForJreRange;
 import org.junit.jupiter.api.condition.JRE;
 import org.junit.platform.launcher.Launcher;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
@@ -32,10 +32,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
 /**
- * Why not just put @EnabledForJreRange directly on the test classes?
+ * Why not just put a JRE condition directly on the test classes?
  * JUnit reflectively loads the target class when discovering tests.
  * Because of spring, the tests contain references/annotations compiled with Java 17.
- * This in turn leads to UnsupportedClassVersionErrors before JUnit can evaluate the @EnableForJRERange when running on older java versions (e.g. 11).
+ * This in turn leads to UnsupportedClassVersionErrors before JUnit can evaluate the condition when running on older java versions (e.g. 11).
  * <p>
  * Therefore, this class can be used to wrap tests, as it programmatically triggers the test execution.
  * The actual test implementation should not be named *Test to not be discovered by the maven surefire plugin.
@@ -48,8 +48,8 @@ public abstract class Java17OnlyTest {
         this.actualTestClass = testClazz;
     }
 
-    @EnabledForJreRange(min = JRE.JAVA_17)
     @Test
+    @DisabledForJreRange(min = JRE.JAVA_8, max = JRE.JAVA_16)
     public void runTests() {
         LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
             .selectors(selectClass(actualTestClass))
