@@ -30,13 +30,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 import static co.elastic.apm.agent.sdk.bytebuddy.CustomElementMatchers.classLoaderCanLoadClass;
-import static net.bytebuddy.matcher.ElementMatchers.declaresMethod;
-import static net.bytebuddy.matcher.ElementMatchers.hasSuperType;
-import static net.bytebuddy.matcher.ElementMatchers.isInterface;
-import static net.bytebuddy.matcher.ElementMatchers.nameContains;
-import static net.bytebuddy.matcher.ElementMatchers.named;
-import static net.bytebuddy.matcher.ElementMatchers.not;
-import static net.bytebuddy.matcher.ElementMatchers.takesArguments;
+import static net.bytebuddy.matcher.ElementMatchers.*;
 
 public class SubscriptionCancelInstrumentation extends ElasticApmInstrumentation {
 
@@ -47,7 +41,12 @@ public class SubscriptionCancelInstrumentation extends ElasticApmInstrumentation
 
     @Override
     public ElementMatcher<? super NamedElement> getTypeMatcherPreFilter() {
-        return nameContains("Subscriber").or(nameContains("Subscription"));
+        return nameEndsWith("Subscriber")
+            .or(nameContains("Subscription"))
+            .or(nameStartsWith("reactor."))
+            .or(nameStartsWith("io.reactivex."))
+            .or(nameStartsWith("io.smallrye.mutiny."))
+            .or(nameStartsWith("org.springframework.http.server.reactive."));
     }
 
     @Override
